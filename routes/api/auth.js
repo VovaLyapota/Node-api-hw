@@ -11,7 +11,7 @@ const {
   getCurrent,
   logout,
   updateSubscription,
-} = require("../../controllers/auth");
+} = require("../../controllers");
 
 const router = express.Router();
 

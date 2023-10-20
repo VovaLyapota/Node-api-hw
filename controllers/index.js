@@ -7,6 +7,14 @@ const {
   updateFavorite,
 } = require("./contacts");
 
+const {
+  register,
+  login,
+  getCurrent,
+  logout,
+  updateSubscription,
+} = require("./auth");
+
 module.exports = {
   getAll,
   getById,
@@ -14,4 +22,9 @@ module.exports = {
   deleteById,
   updateById,
   updateFavorite,
+  register,
+  login,
+  getCurrent,
+  logout,
+  updateSubscription,
 };
