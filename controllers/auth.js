@@ -1,12 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { User, schemas } = require("../models/user");
+const { User } = require("../models/user");
 const { HttpError, ctrlWrapper } = require("../utils");
 
 const register = async (req, res) => {
-  const { error } = schemas.registerSchema.validate(req.body);
-  if (error) throw HttpError(400, error.message);
-
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
@@ -25,14 +22,9 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { error } = schemas.loginSchema.validate(req.body);
-  if (error) throw HttpError(400, error.message);
-
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  if (!user) {
-    throw HttpError(401, "Email is invalid");
-  }
+  if (!user) throw HttpError(401, "Email is invalid");
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
@@ -75,9 +67,6 @@ const logout = async (req, res) => {
 };
 
 const updateSubscription = async (req, res) => {
-  const { error } = schemas.updateSubscriptionSchema.validate(req.body);
-  if (error) throw HttpError(400, error.message);
-
   const { _id } = req.user;
 
   await User.findByIdAndUpdate(_id, req.body);

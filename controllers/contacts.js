@@ -1,24 +1,5 @@
-const Joi = require("joi");
 const Contact = require("../models/contact");
 const { HttpError, ctrlWrapper } = require("../utils");
-
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean(),
-});
-
-const updateSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
-  favorite: Joi.boolean(),
-});
-
-const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
@@ -49,9 +30,6 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) throw HttpError(400, error.message);
-
   const { _id: owner } = req.user;
   const newContact = await Contact.create({ ...req.body, owner });
 
@@ -69,10 +47,8 @@ const deleteById = async (req, res) => {
 
 const updateById = async (req, res) => {
   const { contactId } = req.params;
-  const { error } = updateSchema.validate(req.body);
 
   if (!Object.keys(req.body).length) throw HttpError(400, "missing fields");
-  if (error) throw HttpError(400, error.message);
 
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
@@ -85,9 +61,6 @@ const updateById = async (req, res) => {
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
-  const { error } = updateFavoriteSchema.validate(req.body);
-
-  if (error) throw HttpError(400, error.message);
 
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,

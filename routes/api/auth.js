@@ -1,5 +1,10 @@
 const express = require("express");
-const { authenticate } = require("../../middlewares");
+const { authenticate, validateBody } = require("../../middlewares");
+const {
+  registerSchema,
+  loginSchema,
+  updateSubscriptionSchema,
+} = require("../../schemas");
 const {
   register,
   login,
@@ -10,14 +15,19 @@ const {
 
 const router = express.Router();
 
-router.post("/register", register);
+router.post("/register", validateBody(registerSchema), register);
 
-router.post("/login", login);
+router.post("/login", validateBody(loginSchema), login);
 
 router.post("/current", authenticate, getCurrent);
 
 router.post("/logout", authenticate, logout);
 
-router.patch("/users", authenticate, updateSubscription);
+router.patch(
+  "/users",
+  authenticate,
+  validateBody(updateSubscriptionSchema),
+  updateSubscription
+);
 
 module.exports = router;
