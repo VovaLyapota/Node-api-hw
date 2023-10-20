@@ -1,7 +1,6 @@
 const Joi = require("joi");
 const Contact = require("../models/contact");
-const { HttpError } = require("../utils");
-const { ctrlWrapper } = require("../utils");
+const { HttpError, ctrlWrapper } = require("../utils");
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
@@ -22,7 +21,19 @@ const updateFavoriteSchema = Joi.object({
 });
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20, favorite } = req.query;
+  const skip = (page - 1) * limit;
+
+  const filter = { owner };
+  if (favorite !== undefined) {
+    filter.favorite = favorite;
+  }
+
+  const result = await Contact.find(filter, "", {
+    skip,
+    limit,
+  }).populate("owner", "_id email");
 
   res.status(200).json(result);
 };
@@ -39,10 +50,10 @@ const getById = async (req, res) => {
 
 const add = async (req, res) => {
   const { error } = addSchema.validate(req.body);
-
   if (error) throw HttpError(400, error.message);
 
-  const newContact = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const newContact = await Contact.create({ ...req.body, owner });
 
   res.status(200).json(newContact);
 };
