@@ -28,6 +28,11 @@ const userSchema = new Schema(
       type: String,
       unique: true,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationCode: { type: String, default: "" },
   },
   { versionKey: false }
 );
