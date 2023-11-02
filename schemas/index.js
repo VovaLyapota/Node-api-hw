@@ -5,6 +5,7 @@ const {
 } = require("./contactSchemas");
 const {
   registerSchema,
+  emailSchema,
   loginSchema,
   updateSubscriptionSchema,
 } = require("./authSchemas");
@@ -14,6 +15,7 @@ module.exports = {
   updateSchema,
   updateFavoriteSchema,
   registerSchema,
+  emailSchema,
   loginSchema,
   updateSubscriptionSchema,
 };

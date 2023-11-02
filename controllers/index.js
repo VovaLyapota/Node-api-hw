@@ -12,6 +12,8 @@ const {
   login,
   getCurrent,
   logout,
+  verifyEmail,
+  resendVerifyEmail,
   updateSubscription,
   updateAvatar,
 } = require("./auth");
@@ -27,6 +29,8 @@ module.exports = {
   login,
   getCurrent,
   logout,
+  verifyEmail,
+  resendVerifyEmail,
   updateSubscription,
   updateAvatar,
 };

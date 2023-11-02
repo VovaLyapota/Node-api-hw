@@ -2,6 +2,7 @@ const express = require("express");
 const { authenticate, validateBody, upload } = require("../../middlewares");
 const {
   registerSchema,
+  emailSchema,
   loginSchema,
   updateSubscriptionSchema,
 } = require("../../schemas");
@@ -10,6 +11,8 @@ const {
   login,
   getCurrent,
   logout,
+  verifyEmail,
+  resendVerifyEmail,
   updateSubscription,
   updateAvatar,
 } = require("../../controllers");
@@ -23,6 +26,10 @@ router.post("/login", validateBody(loginSchema), login);
 router.post("/current", authenticate, getCurrent);
 
 router.post("/logout", authenticate, logout);
+
+router.get("/verify/:verificationCode", verifyEmail);
+
+router.post("/verify", validateBody(emailSchema), resendVerifyEmail);
 
 router.patch(
   "/users",
